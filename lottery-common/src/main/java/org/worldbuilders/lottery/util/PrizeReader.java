@@ -51,7 +51,7 @@ public class PrizeReader extends ExcelReader {
 			} else if (headerMapping.getTypeHeader().equals(cellValue)) {
 				typeIndex = columnIndex;
 			} else {
-				log.trace("Found ignored column header '{}'", cellValue);
+				log.trace("Found ignored column header '{}' at index {}", cellValue, columnIndex);
 			}
 		}
 	}

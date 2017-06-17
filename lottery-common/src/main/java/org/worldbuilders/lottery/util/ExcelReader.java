@@ -36,6 +36,7 @@ public abstract class ExcelReader {
 			readHeaderRow(headerRow);
 			while (rowIterator.hasNext()) {
 				Row currentRow = rowIterator.next();
+
 				log.trace("Adding row {} in process() method", currentRow.getRowNum());
 				addEntry(parseRow(currentRow));
 			}

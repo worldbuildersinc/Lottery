@@ -3,19 +3,33 @@ package org.worldbuilders;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.worldbuilders.lottery.Lottery;
+import org.worldbuilders.lottery.bean.Prize;
+import org.worldbuilders.lottery.bean.RaffleTicket;
+import org.worldbuilders.lottery.bean.excel.DonationEntry;
+import org.worldbuilders.lottery.bean.excel.PrizeEntry;
+import org.worldbuilders.lottery.util.DonationMapper;
+import org.worldbuilders.lottery.util.DonationReader;
+import org.worldbuilders.lottery.util.PrizeMapper;
+import org.worldbuilders.lottery.util.PrizeReader;
+import org.worldbuilders.task.FileOperationTask;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 
 public class MainController {
@@ -29,9 +43,13 @@ public class MainController {
 	private ListView<String> consoleBox;
 	@FXML
 	private Button runButton;
-	private boolean donorsChosen = false;
-	private boolean prizesChosen = false;
+	@FXML
+	private ProgressBar progressBar;
 	private ObservableList<String> logMessages;
+
+	private List<RaffleTicket> raffleTickets;
+	private List<Prize> prizes;
+	private Map<Prize, RaffleTicket> winners;
 
 	public void handleWindowShownEvent() {
 		logMessages = FXCollections.observableArrayList("Ready to start");
@@ -40,40 +58,95 @@ public class MainController {
 
 	@FXML
 	public void handleLotteryStart(ActionEvent event) {
-		logInfoMessage("Inside handleLotteryStart");
+		progressBar.setProgress(0.0);
+		Task task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				Lottery lottery = new Lottery(raffleTickets, prizes);
+				int prizeCount = prizes.size();
+				int remainingPrizes = prizeCount;
+				updateProgressBar(prizeCount, lottery.getRemainingPrizes());
+				while ((remainingPrizes = lottery.getRemainingPrizes()) > 0) {
+					lottery.selectWinner();
+					updateProgressBar(prizeCount, remainingPrizes);
+				}
+				winners = lottery.getWinners();
+				return null;
+			}
+		};
+		logInfoMessage("Starting Lottery in Background");
+		new Thread(task).start();
+		task.setOnSucceeded(event1 -> handleLotteryComplete());
+
+	}
+
+	public void handleLotteryComplete() {
+		progressBar.setProgress(1.0);
+		logInfoMessage(String.format("Lottery Completed Successfully with %d winners chosen", winners.size()));
+		progressBar.setProgress(0.0);
+	}
+
+	private void updateProgressBar(Integer totalPrizes, Integer remainingPrizes) {
+		Integer completed = totalPrizes - remainingPrizes;
+		double value = completed.doubleValue() / totalPrizes.doubleValue();
+		progressBar.setProgress(value);
 	}
 
 	@FXML
 	public void handleDonationButtonClick(ActionEvent event) {
-		logInfoMessage("handleDonationButtonClick");
 		Node node = (Node) event.getSource();
-		String fileName = showFileChooser(node.getScene().getWindow());
-		logInfoMessage(String.format("Parsing file '%s'", fileName));
+		final File file = showFileChooser(node.getScene().getWindow());
+		String fileName = file != null ? file.toString() : "";
 		if (!StringUtils.isEmpty(fileName)) {
-			donorsChosen = true;
+			logInfoMessage(String.format("Parsing targetFile '%s'", fileName));
+			FileOperationTask<Void> task = new FileOperationTask<Void>(file) {
+				@Override
+				protected Void call() throws Exception {
+					DonationReader donationReader = new DonationReader(targetFile);
+					donationReader.process();
+					final List<DonationEntry> entries = donationReader.getEntries();
+					logInfoMessage(String.format("%d lines read from Spreadsheet", entries.size()));
+					raffleTickets = DonationMapper.mapAll(entries);
+					logInfoMessage(String.format("%d Raffle Tickets Generated", raffleTickets.size()));
+					return null;
+				}
+			};
+			new Thread(task).run();
+			task.setOnSucceeded(event1 -> verifyRunReady());
 			donorField.setText(fileName);
 		}
-		verifyRunReady();
 	}
 
 	@FXML
 	public void handlePrizeButtonClick(ActionEvent event) {
-		logInfoMessage("handlePrizeButtonClick");
 		Node node = (Node) event.getSource();
-		String fileName = showFileChooser(node.getScene().getWindow());
-		logInfoMessage(String.format("Parsing file '%s'", fileName));
+		final File file = showFileChooser(node.getScene().getWindow());
+		String fileName = file != null ? file.toString() : "";
 		if (!StringUtils.isEmpty(fileName)) {
-			prizesChosen = true;
+			logInfoMessage(String.format("Parsing targetFile '%s'", fileName));
+			FileOperationTask<Void> task = new FileOperationTask<Void>(file) {
+				@Override
+				protected Void call() throws Exception {
+					PrizeReader prizeReader = new PrizeReader(targetFile);
+					prizeReader.process();
+					final List<PrizeEntry> entries = prizeReader.getEntries();
+					logInfoMessage(String.format("%d lines read from Spreadsheet", entries.size()));
+					prizes = PrizeMapper.mapAll(entries);
+					logInfoMessage(String.format("%d Prizes Generated", prizes.size()));
+					return null;
+				}
+			};
+			new Thread(task).run();
+			task.setOnSucceeded(event1 -> verifyRunReady());
 			prizeField.setText(fileName);
 		}
-		verifyRunReady();
 	}
 
-	private String showFileChooser(Window window) {
+	private File showFileChooser(Window window) {
 		return showFileChooser(window, false);
 	}
 
-	private String showFileChooser(Window window, Boolean saveAction) {
+	private File showFileChooser(Window window, Boolean saveAction) {
 		File file;
 		FileChooser fileChooser = new FileChooser();
 		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Excel Files (*.xlsx, *.xls)", "*.xlsx", "*.xls");
@@ -84,11 +157,11 @@ public class MainController {
 			file = fileChooser.showOpenDialog(window);
 		}
 
-		return file.toString();
+		return file;
 	}
 
 	private void verifyRunReady() {
-		if (donorsChosen && prizesChosen) {
+		if ((raffleTickets != null && !raffleTickets.isEmpty()) && (prizes != null && !prizes.isEmpty())) {
 			runButton.setDisable(false);
 		}
 	}
@@ -96,6 +169,12 @@ public class MainController {
 	private void logInfoMessage(String message) {
 		logMessages.add(message);
 		log.debug(message);
+		Platform.runLater(() -> consoleBox.scrollTo(logMessages.size() - 1));
+	}
+
+	private void logErrorMessage(String message) {
+		logMessages.add(String.format("ERROR: ", message));
+		log.error(message);
 		Platform.runLater(() -> consoleBox.scrollTo(logMessages.size() - 1));
 	}
 

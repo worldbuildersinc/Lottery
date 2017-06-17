@@ -17,11 +17,11 @@
             <children>
                 <Button id="donorButton" fx:id="donationButton" mnemonicParsing="false"
                         onAction="#handleDonationButtonClick" text="Choose Donor File"/>
-                <TextField fx:id="donorField" id="donorField" editable="false" focusTraversable="false"
+                <TextField id="donorField" fx:id="donorField" editable="false" focusTraversable="false"
                            prefHeight="27.0" prefWidth="200.0"/>
                 <Button id="prizeButton" fx:id="prizeButton" mnemonicParsing="false" onAction="#handlePrizeButtonClick"
                         text="Choose Prize File"/>
-                <TextField fx:id="prizeField" id="prizeField" editable="false" focusTraversable="false"
+                <TextField id="prizeField" fx:id="prizeField" editable="false" focusTraversable="false"
                            prefHeight="27.0" prefWidth="200.0"/>
                 <Button id="runButton" fx:id="runButton" disable="true" mnemonicParsing="false"
                         onAction="#handleLotteryStart" text="Run"/>
@@ -33,6 +33,11 @@
                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
             </children>
         </AnchorPane>
+        <HBox VBox.vgrow="NEVER" alignment="CENTER_RIGHT">
+            <children>
+                <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0"/>
+            </children>
+        </HBox>
 
 
     </children>
