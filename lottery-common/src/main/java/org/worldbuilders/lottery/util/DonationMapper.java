@@ -27,6 +27,7 @@ public class DonationMapper {
 		raffleTicket.setShippingName(entry.getShippingName());
 		raffleTicket.setShippingAddress1(entry.getShippingAddress1());
 		raffleTicket.setShippingAddress2(entry.getShippingAddress2());
+		raffleTicket.setShippingState(entry.getShippingState());
 		raffleTicket.setShippingCity(entry.getShippingCity());
 		raffleTicket.setShippingCountry(entry.getShippingCountry());
 		raffleTicket.setShippingPostCode(entry.getShippingPostCode());

@@ -21,13 +21,11 @@ import org.worldbuilders.lottery.bean.Prize;
 import org.worldbuilders.lottery.bean.RaffleTicket;
 import org.worldbuilders.lottery.bean.excel.DonationEntry;
 import org.worldbuilders.lottery.bean.excel.PrizeEntry;
-import org.worldbuilders.lottery.util.DonationMapper;
-import org.worldbuilders.lottery.util.DonationReader;
-import org.worldbuilders.lottery.util.PrizeMapper;
-import org.worldbuilders.lottery.util.PrizeReader;
+import org.worldbuilders.lottery.util.*;
 import org.worldbuilders.task.FileOperationTask;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -76,14 +74,24 @@ public class MainController {
 		};
 		logInfoMessage("Starting Lottery in Background");
 		new Thread(task).start();
-		task.setOnSucceeded(event1 -> handleLotteryComplete());
+		task.setOnSucceeded(event1 -> handleLotteryComplete(event));
 
 	}
 
-	public void handleLotteryComplete() {
+	public void handleLotteryComplete(ActionEvent event) {
 		progressBar.setProgress(1.0);
 		logInfoMessage(String.format("Lottery Completed Successfully with %d winners chosen", winners.size()));
 		progressBar.setProgress(0.0);
+		Node node = (Node) event.getSource();
+		File file = showFileChooser(node.getScene().getWindow(), true);
+		ResultWriter writer = new ResultWriter(file);
+		try {
+			writer.processWinners(winners);
+			logInfoMessage("Lottery Complete");
+			logInfoMessage(String.format("Output at '%s'", file.toString()));
+		} catch (IOException e) {
+			logErrorMessage(e.getMessage());
+		}
 	}
 
 	private void updateProgressBar(Integer totalPrizes, Integer remainingPrizes) {
