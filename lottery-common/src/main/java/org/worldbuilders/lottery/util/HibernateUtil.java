@@ -17,7 +17,6 @@ public class HibernateUtil {
 			if (sessionFactory == null) {
 				Configuration configuration = new Configuration();
 				configuration.addAnnotatedClass(RaffleTicket.class);
-				configuration.addAnnotatedClass(Prize.class);
 				configuration.configure(HibernateUtil.class.getResource("/hibernate.cfg.xml"));
 				StandardServiceRegistryBuilder serviceRegistryBuilder = new StandardServiceRegistryBuilder();
 				serviceRegistryBuilder.applySettings(configuration.getProperties());

@@ -8,18 +8,21 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.worldbuilders.lottery.util.HibernateUtil;
 
 public class MainApp extends Application {
 
 	private static final Logger log = LoggerFactory.getLogger(MainApp.class);
 
 	public static void main(String[] args) throws Exception {
+		HibernateUtil.getSessionFactory();
 		launch(args);
 	}
 
 	public void start(Stage stage) throws Exception {
 
 		log.info("Starting Application");
+
 
 		String fxmlFile = "/fxml/lottery.fxml";
 		log.debug("Loading FXML for main view from: {}", fxmlFile);

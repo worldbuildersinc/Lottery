@@ -10,7 +10,9 @@ import java.util.UUID;
 /**
  * Created by brendondugan on 6/13/17.
  */
+@Deprecated
 public class PrizeMapper {
+	@Deprecated
 	public static List<Prize> map(PrizeEntry entry) {
 		ArrayList<Prize> prizes = new ArrayList<>();
 		for (int i = 0; i < entry.getQuantity(); i++) {
@@ -19,6 +21,7 @@ public class PrizeMapper {
 		return prizes;
 	}
 
+	@Deprecated
 	public static Prize mapSingle(PrizeEntry entry) {
 		Prize prize = new Prize();
 		prize.setId(UUID.randomUUID());
@@ -27,6 +30,7 @@ public class PrizeMapper {
 		return prize;
 	}
 
+	@Deprecated
 	public static List<Prize> mapAll(List<PrizeEntry> entries) {
 		ArrayList<Prize> prizes = new ArrayList<>();
 		for (PrizeEntry entry : entries) {

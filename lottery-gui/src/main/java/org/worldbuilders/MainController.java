@@ -1,16 +1,14 @@
 package org.worldbuilders;
 
 import javafx.application.Platform;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import org.apache.commons.lang.StringUtils;
@@ -22,10 +20,14 @@ import org.worldbuilders.lottery.bean.RaffleTicket;
 import org.worldbuilders.lottery.bean.excel.DonationEntry;
 import org.worldbuilders.lottery.bean.excel.PrizeEntry;
 import org.worldbuilders.lottery.util.*;
+import org.worldbuilders.lottery.util.excel.OptimizedDonationMapper;
+import org.worldbuilders.lottery.util.excel.OptimizedDonationReader;
+import org.worldbuilders.lottery.util.excel.OptimizedPrizeMapper;
 import org.worldbuilders.task.FileOperationTask;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -45,12 +47,14 @@ public class MainController {
 	private ProgressBar progressBar;
 	private ObservableList<String> logMessages;
 
+
 	private List<RaffleTicket> raffleTickets;
 	private List<Prize> prizes;
 	private Map<Prize, RaffleTicket> winners;
 
 	public void handleWindowShownEvent() {
-		logMessages = FXCollections.observableArrayList("Ready to start");
+		logMessages = FXCollections.observableArrayList();
+		logInfoMessage(String.format("Ready to Start at %s", new Date().toString()));
 		consoleBox.setItems(logMessages);
 	}
 
@@ -61,6 +65,7 @@ public class MainController {
 			@Override
 			protected Void call() throws Exception {
 				Lottery lottery = new Lottery(raffleTickets, prizes);
+
 				int prizeCount = prizes.size();
 				int remainingPrizes = prizeCount;
 				updateProgressBar(prizeCount, lottery.getRemainingPrizes());
@@ -73,6 +78,9 @@ public class MainController {
 			}
 		};
 		logInfoMessage("Starting Lottery in Background");
+		logInfoMessage("This will take a while.");
+		logInfoMessage(new Date().toString());
+		progressBar.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
 		new Thread(task).start();
 		task.setOnSucceeded(event1 -> handleLotteryComplete(event));
 
@@ -81,13 +89,14 @@ public class MainController {
 	public void handleLotteryComplete(ActionEvent event) {
 		progressBar.setProgress(1.0);
 		logInfoMessage(String.format("Lottery Completed Successfully with %d winners chosen", winners.size()));
+		logInfoMessage(new Date().toString());
 		progressBar.setProgress(0.0);
 		Node node = (Node) event.getSource();
 		File file = showFileChooser(node.getScene().getWindow(), true);
 		ResultWriter writer = new ResultWriter(file);
 		try {
 			writer.processWinners(winners);
-			logInfoMessage("Lottery Complete");
+			logInfoMessage(String.format("Lottery Complete at %s", new Date().toString()));
 			logInfoMessage(String.format("Output at '%s'", file.toString()));
 		} catch (IOException e) {
 			logErrorMessage(e.getMessage());
@@ -97,7 +106,7 @@ public class MainController {
 	private void updateProgressBar(Integer totalPrizes, Integer remainingPrizes) {
 		Integer completed = totalPrizes - remainingPrizes;
 		double value = completed.doubleValue() / totalPrizes.doubleValue();
-		progressBar.setProgress(value);
+		Platform.runLater(() -> progressBar.setProgress(value));
 	}
 
 	@FXML
@@ -110,11 +119,11 @@ public class MainController {
 			FileOperationTask<Void> task = new FileOperationTask<Void>(file) {
 				@Override
 				protected Void call() throws Exception {
-					DonationReader donationReader = new DonationReader(targetFile);
+					OptimizedDonationReader donationReader = new OptimizedDonationReader(file);
 					donationReader.process();
 					final List<DonationEntry> entries = donationReader.getEntries();
 					logInfoMessage(String.format("%d lines read from Spreadsheet", entries.size()));
-					raffleTickets = DonationMapper.mapAll(entries);
+					raffleTickets = OptimizedDonationMapper.mapAll(entries);
 					logInfoMessage(String.format("%d Raffle Tickets Generated", raffleTickets.size()));
 					return null;
 				}
@@ -139,7 +148,7 @@ public class MainController {
 					prizeReader.process();
 					final List<PrizeEntry> entries = prizeReader.getEntries();
 					logInfoMessage(String.format("%d lines read from Spreadsheet", entries.size()));
-					prizes = PrizeMapper.mapAll(entries);
+					prizes = OptimizedPrizeMapper.mapAll(entries);
 					logInfoMessage(String.format("%d Prizes Generated", prizes.size()));
 					return null;
 				}

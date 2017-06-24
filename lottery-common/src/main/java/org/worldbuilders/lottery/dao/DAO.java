@@ -34,9 +34,22 @@ public abstract class DAO<T> {
 		transaction.commit();
 	}
 
+	public void batchSave(List<T> batch, int batchProcessingSize){
+		for(int i = 0; i < batch.size(); i += batchProcessingSize){
+			List<T> currentBatch = batch.subList(i, Math.min(batch.size(), i+batchProcessingSize));
+			for(T instance : currentBatch){
+				save(instance);
+			}
+			cleanup();
+		}
+	}
+
+
 	abstract List<T> getAll();
 
 	abstract List<T> getByType(String type);
+
+	abstract T getRandomSingleByType(String type);
 
 	protected Session getSession() {
 		Session currentSession = sessionFactory.getCurrentSession();
@@ -51,9 +64,8 @@ public abstract class DAO<T> {
 
 	public void cleanup() {
 		Session session = getSession();
-		log.debug("Flushing Session");
 		session.flush();
-		log.debug("Closing Session");
+		session.clear();
 //		session.close();
 	}
 }

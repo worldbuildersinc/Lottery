@@ -32,6 +32,16 @@ public class RaffleTicketDAO extends DAO<RaffleTicket> {
 		return query.list();
 	}
 
+	@Override
+	public RaffleTicket getRandomSingleByType(String type) {
+		log.debug("Getting all Raffle tickets by type {}", type);
+		Session session = this.getSession();
+		String queryString = String.format("%s ORDER BY RAND() DESC", getQueryString(type));
+		Query<RaffleTicket> query = session.createQuery(queryString, RaffleTicket.class);
+		query.setMaxResults(1);
+		return query.getSingleResult();
+	}
+
 	private String getQueryString(String type) {
 		String query = "";
 		switch (type.toLowerCase()) {
