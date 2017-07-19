@@ -85,15 +85,34 @@ public class OptimizedDonationReader {
 		DonationEntry donationEntry = new DonationEntry();
 		donationEntry.setNumberOfTickets(row.getIntegerValue(headerMapping.getNumberOfTicketsHeader()));
 		donationEntry.setEmailAddress(row.getStringValue(headerMapping.getEmailAddressHeader()));
-		donationEntry.setShippingName(row.getStringValue(headerMapping.getShippingNameHeader()));
-		donationEntry.setShippingAddress1(row.getStringValue(headerMapping.getShippingAddress1Header()));
+		if (row.stringValueExistsForHeader(headerMapping.getShippingNameHeader())) {
+			donationEntry.setShippingName(row.getStringValue(headerMapping.getShippingNameHeader()));
+		}
+
+		if (row.stringValueExistsForHeader(headerMapping.getShippingAddress1Header())) {
+			donationEntry.setShippingAddress1(row.getStringValue(headerMapping.getShippingAddress1Header()));
+		}
+
 		if (row.stringValueExistsForHeader(headerMapping.getShippingAddress2Header())) {
 			donationEntry.setShippingAddress2(row.getStringValue(headerMapping.getShippingAddress2Header()));
 		}
-		donationEntry.setShippingCity(row.getStringValue(headerMapping.getShippingCityHeader()));
-		donationEntry.setShippingState(row.getStringValue(headerMapping.getShippingStateHeader()));
-		donationEntry.setShippingPostCode(row.getStringValue(headerMapping.getShippingPostCodeHeader()));
-		donationEntry.setShippingCountry(row.getStringValue(headerMapping.getShippingCountryHeader()));
+
+		if (row.stringValueExistsForHeader(headerMapping.getShippingCityHeader())) {
+			donationEntry.setShippingCity(row.getStringValue(headerMapping.getShippingCityHeader()));
+		}
+
+		if (row.stringValueExistsForHeader(headerMapping.getShippingStateHeader())) {
+			donationEntry.setShippingState(row.getStringValue(headerMapping.getShippingStateHeader()));
+		}
+
+		if (row.stringValueExistsForHeader(headerMapping.getShippingPostCodeHeader())) {
+			donationEntry.setShippingPostCode(row.getStringValue(headerMapping.getShippingPostCodeHeader()));
+		}
+
+		if (row.stringValueExistsForHeader(headerMapping.getShippingCountryHeader())) {
+			donationEntry.setShippingCountry(row.getStringValue(headerMapping.getShippingCountryHeader()));
+		}
+
 		donationEntry.setJocoPref(row.stringValueExistsForHeader(headerMapping.getJocoPrefHeader()));
 		donationEntry.setBooksPref(row.stringValueExistsForHeader(headerMapping.getBooksPrefHeader()));
 		donationEntry.setGamesPref(row.stringValueExistsForHeader(headerMapping.getGamesPrefHeader()));

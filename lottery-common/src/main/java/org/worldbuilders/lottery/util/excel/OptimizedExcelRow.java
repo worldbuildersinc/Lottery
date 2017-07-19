@@ -26,12 +26,7 @@ public class OptimizedExcelRow {
 	}
 
 	public String getStringValue(String header) throws ClassCastException, ColumnNotFoundException {
-		Object o = getByHeader(header);
-		if(String.class.equals(o.getClass())){
-			return (String) o;
-		}
-		throwWrongTypeException(header, o, String.class);
-		return null;
+		return getByHeader(header).toString();
 	}
 
 	public Integer getIntegerValue(String header) throws ClassCastException, ColumnNotFoundException, NumberFormatException {
