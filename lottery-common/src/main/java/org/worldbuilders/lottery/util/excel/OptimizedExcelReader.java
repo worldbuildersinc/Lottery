@@ -2,6 +2,7 @@ package org.worldbuilders.lottery.util.excel;
 
 import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -37,10 +38,26 @@ public class OptimizedExcelReader {
 			mapHeaders(headerRow);
 			while (iterator.hasNext()){
 				Row row = iterator.next();
-				rows.add(new OptimizedExcelRow(mapRow(row)));
+				if(!isEmptyRow(row)) {
+					rows.add(new OptimizedExcelRow(mapRow(row)));
+				}
 			}
 		}
 		workbook.close();
+	}
+
+	private boolean isEmptyRow(Row row) {
+		if(row == null || row.getLastCellNum() <= 0){
+			return true;
+		}
+		for(Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext();) {
+			Cell cell = cellIterator.next();
+			if(!StringUtils.isEmpty(cell.getStringCellValue())){
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	public Map<Integer, String> getHeaders() {

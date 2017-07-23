@@ -64,9 +64,15 @@ public class OptimizedPrizeReader {
 
 	private PrizeEntry map(OptimizedExcelRow row){
 		PrizeEntry prizeEntry = new PrizeEntry();
-		prizeEntry.setName(row.getStringValue(headerMapping.getNameHeader()));
-		prizeEntry.setType(row.getStringValue(headerMapping.getTypeHeader()));
-		prizeEntry.setQuantity(row.getIntegerValue(headerMapping.getQuantityHeader()));
-		return null;
+		if (row.stringValueExistsForHeader(headerMapping.getNameHeader())) {
+			prizeEntry.setName(row.getStringValue(headerMapping.getNameHeader()));
+		}
+		if (row.stringValueExistsForHeader(headerMapping.getTypeHeader())) {
+			prizeEntry.setType(row.getStringValue(headerMapping.getTypeHeader()));
+		}
+		if (row.stringValueExistsForHeader(headerMapping.getQuantityHeader())) {
+			prizeEntry.setQuantity(row.getIntegerValue(headerMapping.getQuantityHeader()));
+		}
+		return prizeEntry;
 	}
 }

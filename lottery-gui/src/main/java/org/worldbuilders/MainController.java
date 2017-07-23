@@ -23,6 +23,7 @@ import org.worldbuilders.lottery.util.*;
 import org.worldbuilders.lottery.util.excel.OptimizedDonationMapper;
 import org.worldbuilders.lottery.util.excel.OptimizedDonationReader;
 import org.worldbuilders.lottery.util.excel.OptimizedPrizeMapper;
+import org.worldbuilders.lottery.util.excel.OptimizedPrizeReader;
 import org.worldbuilders.task.FileOperationTask;
 
 import java.io.File;
@@ -144,7 +145,7 @@ public class MainController {
 			FileOperationTask<Void> task = new FileOperationTask<Void>(file) {
 				@Override
 				protected Void call() throws Exception {
-					PrizeReader prizeReader = new PrizeReader(targetFile);
+					OptimizedPrizeReader prizeReader = new OptimizedPrizeReader(targetFile);
 					prizeReader.process();
 					final List<PrizeEntry> entries = prizeReader.getEntries();
 					logInfoMessage(String.format("%d lines read from Spreadsheet", entries.size()));
