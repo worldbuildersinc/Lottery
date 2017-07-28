@@ -1,11 +1,9 @@
 package org.worldbuilders.lottery.util.excel;
 
-import lombok.Cleanup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -14,9 +12,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
-import static org.apache.poi.ss.usermodel.CellType.STRING;
 
 /**
  * Created by brendondugan on 6/22/17.
@@ -33,12 +28,13 @@ public class OptimizedExcelReader {
 		XSSFSheet worksheet = workbook.getSheetAt(0);
 		rows = new ArrayList<>(worksheet.getLastRowNum());
 		Iterator<Row> iterator = worksheet.iterator();
-		if(iterator.hasNext()){
+		if (iterator.hasNext()) {
 			Row headerRow = iterator.next();
 			mapHeaders(headerRow);
-			while (iterator.hasNext()){
+			while (iterator.hasNext()) {
 				Row row = iterator.next();
-				if(!isEmptyRow(row)) {
+				if (!isEmptyRow(row)) {
+
 					rows.add(new OptimizedExcelRow(mapRow(row)));
 				}
 			}
@@ -47,14 +43,20 @@ public class OptimizedExcelReader {
 	}
 
 	private boolean isEmptyRow(Row row) {
-		if(row == null || row.getLastCellNum() <= 0){
+		if (row == null || row.getLastCellNum() <= 0) {
 			return true;
 		}
-		for(Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext();) {
+		for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
 			Cell cell = cellIterator.next();
-			if(!StringUtils.isEmpty(cell.getStringCellValue())){
+			String stringCellValue = "";
+			try {
+				stringCellValue = cell.getStringCellValue();
+			} catch (Exception e) {
+			}
+			if (!StringUtils.isEmpty(stringCellValue)) {
 				return false;
 			}
+
 		}
 
 		return true;
@@ -68,10 +70,10 @@ public class OptimizedExcelReader {
 		return rows;
 	}
 
-	private Map<String,Object> mapRow(Row row) {
+	private Map<String, Object> mapRow(Row row) {
 		Map<String, Object> rowMap = new HashMap<>();
 
-		for(Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext();) {
+		for (Iterator<Cell> cellIterator = row.cellIterator(); cellIterator.hasNext(); ) {
 			Cell cell = cellIterator.next();
 
 			switch (cell.getCellTypeEnum()) {
@@ -92,8 +94,8 @@ public class OptimizedExcelReader {
 		return rowMap;
 	}
 
-	private void mapHeaders(Row headerRow){
-		for(Iterator<Cell> cellIterator = headerRow.cellIterator(); cellIterator.hasNext();){
+	private void mapHeaders(Row headerRow) {
+		for (Iterator<Cell> cellIterator = headerRow.cellIterator(); cellIterator.hasNext(); ) {
 			Cell cell = cellIterator.next();
 			headers.put(cell.getColumnIndex(), cell.getStringCellValue());
 		}
