@@ -5,7 +5,10 @@ import org.worldbuilders.lottery.bean.Prize;
 import org.worldbuilders.lottery.bean.RaffleTicket;
 import org.worldbuilders.lottery.dao.RaffleTicketDAO;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
  * Created by brendondugan on 6/10/17.
@@ -43,81 +46,91 @@ public class Lottery {
 	public void selectWinner() {
 		Prize prize = getRandomPrize();
 		RaffleTicket raffleTicket = getRandomRaffleTicketByType(prize.getType());
+		while (isDuplicatePrizeForUser(prize, raffleTicket)){
+			raffleTicket = getRandomRaffleTicketByType(prize.getType());
+		}
 		winners.put(prize, raffleTicket);
 		cleanupWinningRaffleTicket(raffleTicket);
 		remainingPrizes--;
 	}
 
+	private boolean isDuplicatePrizeForUser(Prize prize, RaffleTicket raffleTicket){
+		for (Prize p : winners.keySet()) {
+			if (p.getName().equals(prize.getName())) {
+				RaffleTicket r = winners.get(p);
+				if (r.getEmailAddress().equals(raffleTicket.getEmailAddress())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 	private void cleanupWinningRaffleTicket(RaffleTicket raffleTicket) {
-		if(bookPreferrers.contains(raffleTicket)){
+		if (bookPreferrers.contains(raffleTicket)) {
 			bookPreferrers.remove(raffleTicket);
 		}
-		if(gamePreferrers.contains(raffleTicket)){
+		if (gamePreferrers.contains(raffleTicket)) {
 			gamePreferrers.remove(raffleTicket);
 		}
-		if(comicPreferrers.contains(raffleTicket)){
+		if (comicPreferrers.contains(raffleTicket)) {
 			comicPreferrers.remove(raffleTicket);
 		}
-		if(jewelryPreferrers.contains(raffleTicket)){
+		if (jewelryPreferrers.contains(raffleTicket)) {
 			jewelryPreferrers.remove(raffleTicket);
 		}
-		if(joCoPreferrers.contains(raffleTicket)){
+		if (joCoPreferrers.contains(raffleTicket)) {
 			joCoPreferrers.remove(raffleTicket);
 		}
-		if(raffleTickets.contains(raffleTicket)){
+		if (raffleTickets.contains(raffleTicket)) {
 			raffleTickets.remove(raffleTicket);
 		}
 	}
 
-	private Prize getRandomPrize(){
+	private Prize getRandomPrize() {
 		return prizes.remove(random.nextInt(prizes.size()));
 	}
 
-	private RaffleTicket getRandomRaffleTicketByType(String type){
+	private RaffleTicket getRandomRaffleTicketByType(String type) {
 		RaffleTicket raffleTicket = null;
 		switch (type.toLowerCase()) {
 			case "joco":
-				if(joCoPreferrers.isEmpty()){
+				if (joCoPreferrers.isEmpty()) {
 					raffleTicket = getRandomRaffleTicketByType("misc");
-				}
-				else {
-					raffleTicket = joCoPreferrers.remove(random.nextInt(joCoPreferrers.size()));
+				} else {
+					raffleTicket = joCoPreferrers.get(random.nextInt(joCoPreferrers.size()));
 				}
 				break;
 			case "book":
-				if(bookPreferrers.isEmpty()){
+				if (bookPreferrers.isEmpty()) {
 					raffleTicket = getRandomRaffleTicketByType("misc");
-				}
-				else {
-					raffleTicket = bookPreferrers.remove(random.nextInt(bookPreferrers.size()));
+				} else {
+					raffleTicket = bookPreferrers.get(random.nextInt(bookPreferrers.size()));
 				}
 				break;
 			case "game":
-				if(gamePreferrers.isEmpty()){
+				if (gamePreferrers.isEmpty()) {
 					raffleTicket = getRandomRaffleTicketByType("misc");
-				}
-				else {
-					raffleTicket = gamePreferrers.remove(random.nextInt(gamePreferrers.size()));
+				} else {
+					raffleTicket = gamePreferrers.get(random.nextInt(gamePreferrers.size()));
 				}
 				break;
 			case "comic":
-				if(comicPreferrers.isEmpty()){
+				if (comicPreferrers.isEmpty()) {
 					raffleTicket = getRandomRaffleTicketByType("misc");
-				}
-				else {
-					raffleTicket = comicPreferrers.remove(random.nextInt(comicPreferrers.size()));
+				} else {
+					raffleTicket = comicPreferrers.get(random.nextInt(comicPreferrers.size()));
 				}
 				break;
 			case "jewelry":
-				if(jewelryPreferrers.isEmpty()){
+				if (jewelryPreferrers.isEmpty()) {
 					raffleTicket = getRandomRaffleTicketByType("misc");
-				}
-				else {
-					raffleTicket = jewelryPreferrers.remove(random.nextInt(jewelryPreferrers.size()));
+				} else {
+					raffleTicket = jewelryPreferrers.get(random.nextInt(jewelryPreferrers.size()));
 				}
 				break;
 			case "misc":
-				raffleTicket = raffleTickets.remove(random.nextInt(raffleTickets.size()));
+				raffleTicket = raffleTickets.get(random.nextInt(raffleTickets.size()));
 				break;
 			default:
 
