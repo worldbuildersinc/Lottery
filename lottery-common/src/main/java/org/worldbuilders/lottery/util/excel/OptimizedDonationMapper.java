@@ -3,7 +3,6 @@ package org.worldbuilders.lottery.util.excel;
 import lombok.extern.slf4j.Slf4j;
 import org.worldbuilders.lottery.bean.RaffleTicket;
 import org.worldbuilders.lottery.bean.excel.DonationEntry;
-import org.worldbuilders.lottery.util.DonationMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,11 @@ public class OptimizedDonationMapper {
 	public static RaffleTicket mapSingle(DonationEntry entry) {
 		RaffleTicket raffleTicket = new RaffleTicket();
 		raffleTicket.setId(UUID.randomUUID());
+		raffleTicket.setCampaign(entry.getCampaign());
+		raffleTicket.setReceivedDate(entry.getReceivedDate());
+		raffleTicket.setCombinedDonationAmount(entry.getCombinedDonationAmount());
+		raffleTicket.setEligibleAmount(entry.getEligibleAmount());
+		raffleTicket.setNumberOfTickets(entry.getNumberOfTickets());
 		raffleTicket.setEmailAddress(entry.getEmailAddress());
 		raffleTicket.setShippingName(entry.getShippingName());
 		raffleTicket.setShippingAddress1(entry.getShippingAddress1());

@@ -18,6 +18,16 @@ public class RaffleTicket {
 	@Id
 	private UUID id;
 	@Column
+	private String campaign;
+	@Column
+	private String receivedDate;
+	@Column
+	private double combinedDonationAmount;
+	@Column
+	private int eligibleAmount;
+	@Column
+	private int numberOfTickets;
+	@Column
 	private String emailAddress;
 	@Column
 	private String shippingName;

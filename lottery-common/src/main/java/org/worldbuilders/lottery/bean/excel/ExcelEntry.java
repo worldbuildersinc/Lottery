@@ -6,7 +6,6 @@ package org.worldbuilders.lottery.bean.excel;
 public class ExcelEntry {
 	protected int rowNumber;
 
-
 	public int getRowNumber() {
 		return rowNumber;
 	}

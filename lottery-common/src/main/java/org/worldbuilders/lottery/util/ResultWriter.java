@@ -35,16 +35,21 @@ public class ResultWriter {
 		worksheet = workbook.createSheet("Lottery Winners");
 		Row row = worksheet.createRow(0);
 		row.createCell(0).setCellValue("Ticket ID");
-		row.createCell(1).setCellValue("Email Address");
-		row.createCell(2).setCellValue("Shipping Name");
-		row.createCell(3).setCellValue("Shipping Address 1");
-		row.createCell(4).setCellValue("Shipping Address 2");
-		row.createCell(5).setCellValue("Shipping City");
-		row.createCell(6).setCellValue("Shipping State");
-		row.createCell(7).setCellValue("Shipping Post Code");
-		row.createCell(8).setCellValue("Shipping Country");
-		row.createCell(9).setCellValue("Prize ID");
-		row.createCell(10).setCellValue("Prize Name");
+		row.createCell(1).setCellValue("Campaign");
+		row.createCell(2).setCellValue("Received Date");
+		row.createCell(3).setCellValue("Combined Donation Amount");
+		row.createCell(4).setCellValue("Eligible Amount");
+		row.createCell(5).setCellValue("Number of Tickets");
+		row.createCell(6).setCellValue("Email Address");
+		row.createCell(7).setCellValue("Shipping Name");
+		row.createCell(8).setCellValue("Shipping Address 1");
+		row.createCell(9).setCellValue("Shipping Address 2");
+		row.createCell(10).setCellValue("Shipping City");
+		row.createCell(11).setCellValue("Shipping State");
+		row.createCell(12).setCellValue("Shipping Post Code");
+		row.createCell(13).setCellValue("Shipping Country");
+		row.createCell(14).setCellValue("Prize ID");
+		row.createCell(15).setCellValue("Prize Name");
 
 	}
 
@@ -57,16 +62,21 @@ public class ResultWriter {
 				log.debug("Writing Winner");
 				Row row = worksheet.createRow(rowIndex);
 				row.createCell(0).setCellValue(raffleTicket.getId().toString());
-				row.createCell(1).setCellValue(raffleTicket.getEmailAddress());
-				row.createCell(2).setCellValue(raffleTicket.getShippingName());
-				row.createCell(3).setCellValue(raffleTicket.getShippingAddress1());
-				row.createCell(4).setCellValue(raffleTicket.getShippingAddress2());
-				row.createCell(5).setCellValue(raffleTicket.getShippingCity());
-				row.createCell(6).setCellValue(raffleTicket.getShippingState());
-				row.createCell(7).setCellValue(raffleTicket.getShippingPostCode());
-				row.createCell(8).setCellValue(raffleTicket.getShippingCountry());
-				row.createCell(9).setCellValue(prize.getId().toString());
-				row.createCell(10).setCellValue(prize.getName());
+				row.createCell(1).setCellValue(raffleTicket.getCampaign());
+				row.createCell(2).setCellValue(raffleTicket.getReceivedDate());
+				row.createCell(3).setCellValue(raffleTicket.getCombinedDonationAmount());
+				row.createCell(4).setCellValue(raffleTicket.getEligibleAmount());
+				row.createCell(5).setCellValue(raffleTicket.getNumberOfTickets());
+				row.createCell(6).setCellValue(raffleTicket.getEmailAddress());
+				row.createCell(7).setCellValue(raffleTicket.getShippingName());
+				row.createCell(8).setCellValue(raffleTicket.getShippingAddress1());
+				row.createCell(9).setCellValue(raffleTicket.getShippingAddress2());
+				row.createCell(10).setCellValue(raffleTicket.getShippingCity());
+				row.createCell(11).setCellValue(raffleTicket.getShippingState());
+				row.createCell(12).setCellValue(raffleTicket.getShippingPostCode());
+				row.createCell(13).setCellValue(raffleTicket.getShippingCountry());
+				row.createCell(14).setCellValue(prize.getId().toString());
+				row.createCell(15).setCellValue(prize.getName());
 				rowIndex++;
 			}
 		});

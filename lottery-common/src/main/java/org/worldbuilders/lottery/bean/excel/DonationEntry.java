@@ -7,6 +7,11 @@ import lombok.Data;
  */
 @Data
 public class DonationEntry extends ExcelEntry {
+
+	private String campaign;
+	private String receivedDate;
+	private double combinedDonationAmount;
+	private int eligibleAmount;
 	private int numberOfTickets;
 	private String emailAddress;
 	private String shippingName;

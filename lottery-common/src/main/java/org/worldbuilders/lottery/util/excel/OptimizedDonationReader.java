@@ -4,8 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.worldbuilders.lottery.bean.excel.DonationEntry;
 import org.worldbuilders.lottery.bean.excel.headermapping.DonationHeaderMapping;
-import org.worldbuilders.lottery.util.excel.OptimizedExcelReader;
-import org.worldbuilders.lottery.util.excel.OptimizedExcelRow;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,21 +27,26 @@ public class OptimizedDonationReader {
 		this(
 				inputFile,
 				new DonationHeaderMapping(
-				"# tickets",
-				"Email Address",
-				"Shipping Name",
-				"Shipping Address 1",
-				"Shipping Address 2",
-				"Shipping City",
-				"Shipping State",
-				"Shipping Postal-Code",
-				"Shipping Country",
-				"JoCoPref",
-				"BooksPref",
-				"GamesPref",
-				"ComicsPref",
-				"JewelryPref"
-		));
+						"Campaign",
+						"Received On",
+						"Combined donation amount",
+						"Eligible amount",
+						"# tickets",
+						"Email Address",
+						"Shipping Name",
+						"Shipping Address 1",
+						"Shipping Address 2",
+						"Shipping City",
+						"Shipping State",
+						"Shipping Postal-Code",
+						"Shipping Country",
+						"JoCoPref",
+						"BooksPref",
+						"GamesPref",
+						"ComicsPref",
+						"JewelryPref"
+				)
+		);
 	}
 
 	public OptimizedDonationReader(File inputFile, DonationHeaderMapping donationHeaderMapping) throws IOException, InvalidFormatException {
@@ -82,7 +85,16 @@ public class OptimizedDonationReader {
 	}
 
 	private DonationEntry map(OptimizedExcelRow row){
+
 		DonationEntry donationEntry = new DonationEntry();
+		if(row.stringValueExistsForHeader(headerMapping.getCampaignHeader())){
+			donationEntry.setCampaign(row.getStringValue(headerMapping.getCampaignHeader()));
+		}
+		if(row.stringValueExistsForHeader(headerMapping.getReceivedDateHeader())){
+			donationEntry.setReceivedDate(row.getStringValue(headerMapping.getReceivedDateHeader()));
+		}
+		donationEntry.setCombinedDonationAmount(row.getDoubleValue(headerMapping.getCombinedDonationAmountHeader()));
+		donationEntry.setEligibleAmount(row.getIntegerValue(headerMapping.getEligibleAmountHeader()));
 		donationEntry.setNumberOfTickets(row.getIntegerValue(headerMapping.getNumberOfTicketsHeader()));
 		donationEntry.setEmailAddress(row.getStringValue(headerMapping.getEmailAddressHeader()));
 		if (row.stringValueExistsForHeader(headerMapping.getShippingNameHeader())) {

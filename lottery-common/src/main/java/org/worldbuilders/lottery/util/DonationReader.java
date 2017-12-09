@@ -41,6 +41,10 @@ public class DonationReader extends ExcelReader {
 		this(
 				inputFile,
 				new DonationHeaderMapping(
+						"Campaign",
+						"Received On",
+						"Combined donation amount",
+						"Eligible amount",
 						"# tickets",
 						"Email Address",
 						"Shipping Name",
