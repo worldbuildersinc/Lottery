@@ -17,8 +17,8 @@ import java.util.*;
  * Created by brendondugan on 6/22/17.
  */
 @Slf4j
-public class OptimizedExcelReader {
-	private Map<Integer, String> headers;
+class OptimizedExcelReader {
+	private final Map<Integer, String> headers;
 	private List<OptimizedExcelRow> rows;
 
 	public OptimizedExcelReader(File inputFile) throws IOException, InvalidFormatException {
@@ -51,7 +51,7 @@ public class OptimizedExcelReader {
 			String stringCellValue = "";
 			try {
 				stringCellValue = cell.getStringCellValue();
-			} catch (Exception e) {
+			} catch (Exception ignored) {
 			}
 			if (!StringUtils.isEmpty(stringCellValue)) {
 				return false;

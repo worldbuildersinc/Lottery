@@ -25,13 +25,11 @@ public class MainApp extends Application {
 
 
 		String fxmlFile = "/fxml/lottery.fxml";
-		log.debug("Loading FXML for main view from: {}", fxmlFile);
 		FXMLLoader loader = new FXMLLoader();
 		Parent rootNode = loader.load(getClass().getResourceAsStream(fxmlFile));
 
 		final MainController controller = loader.getController();
 		stage.addEventHandler(WindowEvent.WINDOW_SHOWN, window -> controller.handleWindowShownEvent());
-		log.debug("Showing JFX scene");
 		Scene scene = new Scene(rootNode);
 		scene.getStylesheets().add("/styles/styles.css");
 		stage.setTitle("WorldBuilders Lottery");

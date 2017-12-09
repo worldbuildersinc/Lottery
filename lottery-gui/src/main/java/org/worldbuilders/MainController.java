@@ -1,7 +1,6 @@
 package org.worldbuilders;
 
 import javafx.application.Platform;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -19,7 +18,7 @@ import org.worldbuilders.lottery.bean.Prize;
 import org.worldbuilders.lottery.bean.RaffleTicket;
 import org.worldbuilders.lottery.bean.excel.DonationEntry;
 import org.worldbuilders.lottery.bean.excel.PrizeEntry;
-import org.worldbuilders.lottery.util.*;
+import org.worldbuilders.lottery.util.ResultWriter;
 import org.worldbuilders.lottery.util.excel.OptimizedDonationMapper;
 import org.worldbuilders.lottery.util.excel.OptimizedDonationReader;
 import org.worldbuilders.lottery.util.excel.OptimizedPrizeMapper;
@@ -68,7 +67,7 @@ public class MainController {
 				Lottery lottery = new Lottery(raffleTickets, prizes);
 
 				int prizeCount = prizes.size();
-				int remainingPrizes = prizeCount;
+				int remainingPrizes;
 				updateProgressBar(prizeCount, lottery.getRemainingPrizes());
 				while ((remainingPrizes = lottery.getRemainingPrizes()) > 0) {
 					lottery.selectWinner();
@@ -87,7 +86,7 @@ public class MainController {
 
 	}
 
-	public void handleLotteryComplete(ActionEvent event) {
+	private void handleLotteryComplete(ActionEvent event) {
 		progressBar.setProgress(1.0);
 		logInfoMessage(String.format("Lottery Completed Successfully with %d winners chosen", winners.size()));
 		logInfoMessage(new Date().toString());
@@ -186,12 +185,11 @@ public class MainController {
 
 	private void logInfoMessage(String message) {
 		logMessages.add(message);
-		log.debug(message);
 		Platform.runLater(() -> consoleBox.scrollTo(logMessages.size() - 1));
 	}
 
 	private void logErrorMessage(String message) {
-		logMessages.add(String.format("ERROR: ", message));
+		logMessages.add(String.format("ERROR: %s", message));
 		log.error(message);
 		Platform.runLater(() -> consoleBox.scrollTo(logMessages.size() - 1));
 	}

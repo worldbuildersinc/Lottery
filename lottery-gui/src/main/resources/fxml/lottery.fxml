@@ -9,36 +9,28 @@
     <padding>
         <Insets bottom="10" left="10" right="10" top="10"/>
     </padding>
-    <children>
-        <FlowPane columnHalignment="CENTER" hgap="5">
-            <padding>
-                <Insets bottom="5"/>
-            </padding>
-            <children>
-                <Button id="donorButton" fx:id="donationButton" mnemonicParsing="false"
-                        onAction="#handleDonationButtonClick" text="Choose Donor File"/>
-                <TextField id="donorField" fx:id="donorField" editable="false" focusTraversable="false"
-                           prefHeight="27.0" prefWidth="200.0"/>
-                <Button id="prizeButton" fx:id="prizeButton" mnemonicParsing="false" onAction="#handlePrizeButtonClick"
-                        text="Choose Prize File"/>
-                <TextField id="prizeField" fx:id="prizeField" editable="false" focusTraversable="false"
-                           prefHeight="27.0" prefWidth="200.0"/>
-                <Button id="runButton" fx:id="runButton" disable="true" mnemonicParsing="false"
-                        onAction="#handleLotteryStart" text="Run"/>
-            </children>
-        </FlowPane>
-        <AnchorPane VBox.vgrow="ALWAYS">
-            <children>
-                <ListView id="consoleBox" fx:id="consoleBox" editable="false" AnchorPane.bottomAnchor="0.0"
-                          AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-            </children>
-        </AnchorPane>
-        <HBox VBox.vgrow="NEVER" alignment="CENTER_RIGHT">
-            <children>
-                <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0"/>
-            </children>
-        </HBox>
+    <FlowPane columnHalignment="CENTER" hgap="5">
+        <padding>
+            <Insets bottom="5"/>
+        </padding>
+        <Button id="donorButton" fx:id="donationButton" mnemonicParsing="false"
+                onAction="#handleDonationButtonClick" text="Choose Donor File"/>
+        <TextField id="donorField" fx:id="donorField" editable="false" focusTraversable="false"
+                   prefHeight="27.0" prefWidth="200.0"/>
+        <Button id="prizeButton" fx:id="prizeButton" mnemonicParsing="false" onAction="#handlePrizeButtonClick"
+                text="Choose Prize File"/>
+        <TextField id="prizeField" fx:id="prizeField" editable="false" focusTraversable="false"
+                   prefHeight="27.0" prefWidth="200.0"/>
+        <Button id="runButton" fx:id="runButton" disable="true" mnemonicParsing="false"
+                onAction="#handleLotteryStart" text="Run"/>
+    </FlowPane>
+    <AnchorPane VBox.vgrow="ALWAYS">
+        <ListView id="consoleBox" fx:id="consoleBox" AnchorPane.bottomAnchor="0.0"
+                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+    </AnchorPane>
+    <HBox VBox.vgrow="NEVER" alignment="CENTER_RIGHT">
+        <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.0"/>
+    </HBox>
 
 
-    </children>
 </VBox>

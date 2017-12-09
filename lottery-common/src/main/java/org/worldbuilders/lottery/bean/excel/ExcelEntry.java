@@ -3,8 +3,8 @@ package org.worldbuilders.lottery.bean.excel;
 /**
  * Created by brendondugan on 4/14/17.
  */
-public class ExcelEntry {
-	protected int rowNumber;
+class ExcelEntry {
+	private int rowNumber;
 
 	public int getRowNumber() {
 		return rowNumber;

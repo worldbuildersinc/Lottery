@@ -15,24 +15,23 @@ import java.util.Random;
  */
 @Slf4j
 public class Lottery {
-	private RaffleTicketDAO raffleTicketDAO;
 	private int remainingPrizes;
-	private Map<Prize, RaffleTicket> winners;
-	private List<RaffleTicket> bookPreferrers;
-	private List<RaffleTicket> gamePreferrers;
-	private List<RaffleTicket> comicPreferrers;
-	private List<RaffleTicket> jewelryPreferrers;
-	private List<RaffleTicket> joCoPreferrers;
-	private List<RaffleTicket> raffleTickets;
-	private List<Prize> prizes;
-	private Random random;
+	private final Map<Prize, RaffleTicket> winners;
+	private final List<RaffleTicket> bookPreferrers;
+	private final List<RaffleTicket> gamePreferrers;
+	private final List<RaffleTicket> comicPreferrers;
+	private final List<RaffleTicket> jewelryPreferrers;
+	private final List<RaffleTicket> joCoPreferrers;
+	private final List<RaffleTicket> raffleTickets;
+	private final List<Prize> prizes;
+	private final Random random;
 
-	public Lottery(List<RaffleTicket> raffleTickets, List<Prize> prizes) throws InterruptedException {
+	public Lottery(List<RaffleTicket> raffleTickets, List<Prize> prizes) {
 		this.random = new Random();
 		this.raffleTickets = raffleTickets;
 		this.prizes = prizes;
 		int batchSize = 100;
-		raffleTicketDAO = new RaffleTicketDAO();
+		RaffleTicketDAO raffleTicketDAO = new RaffleTicketDAO();
 		this.winners = new HashMap<>();
 		raffleTicketDAO.batchSave(raffleTickets, batchSize);
 		remainingPrizes = prizes.size();

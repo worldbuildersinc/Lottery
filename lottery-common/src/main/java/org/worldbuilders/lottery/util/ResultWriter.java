@@ -19,9 +19,8 @@ import java.util.function.BiConsumer;
  */
 @Slf4j
 public class ResultWriter {
-	private File destination;
+	private final File destination;
 	private XSSFWorkbook workbook;
-	private CreationHelper creationHelper;
 	private Sheet worksheet;
 
 	public ResultWriter(File destination) {
@@ -31,7 +30,7 @@ public class ResultWriter {
 
 	private void initialize() {
 		workbook = new XSSFWorkbook();
-		creationHelper = workbook.getCreationHelper();
+		CreationHelper creationHelper = workbook.getCreationHelper();
 		worksheet = workbook.createSheet("Lottery Winners");
 		Row row = worksheet.createRow(0);
 		row.createCell(0).setCellValue("Ticket ID");
@@ -59,7 +58,6 @@ public class ResultWriter {
 
 			@Override
 			public void accept(Prize prize, RaffleTicket raffleTicket) {
-				log.debug("Writing Winner");
 				Row row = worksheet.createRow(rowIndex);
 				row.createCell(0).setCellValue(raffleTicket.getId().toString());
 				row.createCell(1).setCellValue(raffleTicket.getCampaign());

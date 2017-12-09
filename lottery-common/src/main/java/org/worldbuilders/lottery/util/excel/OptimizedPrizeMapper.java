@@ -2,8 +2,6 @@ package org.worldbuilders.lottery.util.excel;
 
 import lombok.extern.slf4j.Slf4j;
 import org.worldbuilders.lottery.bean.Prize;
-import org.worldbuilders.lottery.bean.RaffleTicket;
-import org.worldbuilders.lottery.bean.excel.DonationEntry;
 import org.worldbuilders.lottery.bean.excel.PrizeEntry;
 
 import java.util.ArrayList;
@@ -20,7 +18,7 @@ import java.util.concurrent.Future;
 @Slf4j
 public class OptimizedPrizeMapper {
 
-	public static List<Prize> map(PrizeEntry entry) {
+	private static List<Prize> map(PrizeEntry entry) {
 		ArrayList<Prize> prizes = new ArrayList<>();
 		for (int i = 0; i < entry.getQuantity(); i++) {
 			prizes.add(mapSingle(entry));
@@ -28,7 +26,7 @@ public class OptimizedPrizeMapper {
 		return prizes;
 	}
 
-	public static Prize mapSingle(PrizeEntry entry) {
+	private static Prize mapSingle(PrizeEntry entry) {
 		Prize prize = new Prize();
 		prize.setId(UUID.randomUUID());
 		prize.setName(entry.getName());

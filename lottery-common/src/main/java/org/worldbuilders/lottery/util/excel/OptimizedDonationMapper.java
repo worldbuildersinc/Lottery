@@ -17,7 +17,7 @@ import java.util.concurrent.Future;
  */
 @Slf4j
 public class OptimizedDonationMapper {
-	public static List<RaffleTicket> map(DonationEntry entry) {
+	private static List<RaffleTicket> map(DonationEntry entry) {
 		ArrayList<RaffleTicket> raffleTickets = new ArrayList<>();
 		for (int i = 0; i < entry.getNumberOfTickets(); i++) {
 			raffleTickets.add(mapSingle(entry));
@@ -25,7 +25,7 @@ public class OptimizedDonationMapper {
 		return raffleTickets;
 	}
 
-	public static RaffleTicket mapSingle(DonationEntry entry) {
+	private static RaffleTicket mapSingle(DonationEntry entry) {
 		RaffleTicket raffleTicket = new RaffleTicket();
 		raffleTicket.setId(UUID.randomUUID());
 		raffleTicket.setCampaign(entry.getCampaign());

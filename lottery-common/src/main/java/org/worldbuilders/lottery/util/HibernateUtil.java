@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
-import org.worldbuilders.lottery.bean.Prize;
 import org.worldbuilders.lottery.bean.RaffleTicket;
 
 @Slf4j

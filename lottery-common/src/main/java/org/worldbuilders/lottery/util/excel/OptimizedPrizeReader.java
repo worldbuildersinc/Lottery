@@ -20,14 +20,14 @@ import java.util.concurrent.Future;
 @Slf4j
 public class OptimizedPrizeReader {
 	private List<PrizeEntry> entries;
-	private PrizeHeaderMapping headerMapping;
+	private final PrizeHeaderMapping headerMapping;
 	private OptimizedExcelReader excelReader;
 
 	public OptimizedPrizeReader(File inputFile) throws IOException, InvalidFormatException {
 		this(inputFile, new PrizeHeaderMapping("Prize Name", "Qty", "Type"));
 	}
 
-	public OptimizedPrizeReader(File inputFile, PrizeHeaderMapping headerMapping) throws IOException, InvalidFormatException {
+	private OptimizedPrizeReader(File inputFile, PrizeHeaderMapping headerMapping) throws IOException, InvalidFormatException {
 		this.headerMapping = headerMapping;
 		this.excelReader = new OptimizedExcelReader(inputFile);
 		this.entries = new ArrayList<>(excelReader.getRows().size());
@@ -43,7 +43,6 @@ public class OptimizedPrizeReader {
 		List<OptimizedExcelRow> rows = excelReader.getRows();
 		for(OptimizedExcelRow row : rows){
 			futures.add(executorService.submit(() -> map(row)));
-//			entries.add(map(row));
 		}
 		executorService.shutdown();
 		while(!futures.isEmpty()){

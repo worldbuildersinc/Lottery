@@ -9,8 +9,8 @@ import java.util.Map;
 /**
  * Created by brendondugan on 6/22/17.
  */
-public class OptimizedExcelRow {
-	private Map<String, Object> content;
+class OptimizedExcelRow {
+	private final Map<String, Object> content;
 
 	public OptimizedExcelRow(Map<String, Object> content) {
 		this.content = content;
@@ -18,8 +18,7 @@ public class OptimizedExcelRow {
 
 	public boolean stringValueExistsForHeader(String header){
 		try {
-			boolean exists = content.containsKey(header) && !StringUtils.isEmpty(getStringValue(header));
-			return exists;
+			return content.containsKey(header) && !StringUtils.isEmpty(getStringValue(header));
 		} catch (ClassCastException | ColumnNotFoundException e) {
 			return false;
 		}
@@ -44,8 +43,7 @@ public class OptimizedExcelRow {
 	public Double getDoubleValue(String header) throws ClassCastException, ColumnNotFoundException, NumberFormatException {
 		Object o = getByHeader(header);
 		if(Double.class.equals(o.getClass())){
-			Double d = (Double) o;
-			return d;
+			return (Double) o;
 		} else if (String.class.equals(o.getClass())){
 			return Double.parseDouble((String) o);
 		}

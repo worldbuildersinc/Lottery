@@ -21,7 +21,7 @@ import java.util.concurrent.Future;
 public class OptimizedDonationReader {
 	private OptimizedExcelReader excelReader;
 	private List<DonationEntry> entries;
-	private DonationHeaderMapping headerMapping;
+	private final DonationHeaderMapping headerMapping;
 
 	public OptimizedDonationReader(File inputFile) throws IOException, InvalidFormatException {
 		this(
@@ -49,7 +49,7 @@ public class OptimizedDonationReader {
 		);
 	}
 
-	public OptimizedDonationReader(File inputFile, DonationHeaderMapping donationHeaderMapping) throws IOException, InvalidFormatException {
+	private OptimizedDonationReader(File inputFile, DonationHeaderMapping donationHeaderMapping) throws IOException, InvalidFormatException {
 		this.headerMapping = donationHeaderMapping;
 		this.excelReader = new OptimizedExcelReader(inputFile);
 		this.entries = new ArrayList<>(excelReader.getRows().size());
@@ -65,7 +65,6 @@ public class OptimizedDonationReader {
 		List<OptimizedExcelRow> rows = excelReader.getRows();
 		for(OptimizedExcelRow row : rows){
 			futures.add(executorService.submit(() -> map(row)));
-//			entries.add(map(row));
 		}
 		executorService.shutdown();
 		while(!futures.isEmpty()){

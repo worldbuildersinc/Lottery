@@ -13,10 +13,10 @@ import java.util.List;
  */
 @Slf4j
 public abstract class DAO<T> {
-	protected SessionFactory sessionFactory;
+	private final SessionFactory sessionFactory;
 
 
-	public DAO() {
+	DAO() {
 		this.sessionFactory = HibernateUtil.getSessionFactory();
 	}
 
@@ -27,7 +27,7 @@ public abstract class DAO<T> {
 		transaction.commit();
 	}
 
-	public void save(T instance) {
+	private void save(T instance) {
 		Session session = this.getSession();
 		Transaction transaction = session.getTransaction();
 		session.save(instance);
@@ -51,7 +51,7 @@ public abstract class DAO<T> {
 
 	abstract T getRandomSingleByType(String type);
 
-	protected Session getSession() {
+	Session getSession() {
 		Session currentSession = sessionFactory.getCurrentSession();
 		if (currentSession == null) {
 			currentSession = sessionFactory.openSession();
@@ -62,10 +62,9 @@ public abstract class DAO<T> {
 		return currentSession;
 	}
 
-	public void cleanup() {
+	private void cleanup() {
 		Session session = getSession();
 		session.flush();
 		session.clear();
-//		session.close();
 	}
 }

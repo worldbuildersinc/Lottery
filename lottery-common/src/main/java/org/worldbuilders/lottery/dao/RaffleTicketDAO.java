@@ -19,14 +19,12 @@ public class RaffleTicketDAO extends DAO<RaffleTicket> {
 
 	@Override
 	public List<RaffleTicket> getAll() {
-		log.debug("Getting all Raffle Tickets");
 		Session session = this.getSession();
 		return session.createQuery("from RaffleTicket where isWinner = false", RaffleTicket.class).list();
 	}
 
 	@Override
 	public List<RaffleTicket> getByType(String type) {
-		log.debug("Getting all Raffle tickets by type {}", type);
 		Session session = this.getSession();
 		Query<RaffleTicket> query = session.createQuery(getQueryString(type), RaffleTicket.class);
 		return query.list();
@@ -34,7 +32,6 @@ public class RaffleTicketDAO extends DAO<RaffleTicket> {
 
 	@Override
 	public RaffleTicket getRandomSingleByType(String type) {
-		log.debug("Getting all Raffle tickets by type {}", type);
 		Session session = this.getSession();
 		String queryString = String.format("%s ORDER BY RAND() DESC", getQueryString(type));
 		Query<RaffleTicket> query = session.createQuery(queryString, RaffleTicket.class);
@@ -72,6 +69,5 @@ public class RaffleTicketDAO extends DAO<RaffleTicket> {
 		} else {
 			throw new IllegalArgumentException("Invalid Prize Type");
 		}
-//		return "from RaffleTicket where RaffleTicket.type = :type and isWinner = false";
 	}
 }
