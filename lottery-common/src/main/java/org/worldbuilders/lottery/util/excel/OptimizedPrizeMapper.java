@@ -31,6 +31,7 @@ public class OptimizedPrizeMapper {
 		prize.setId(UUID.randomUUID());
 		prize.setName(entry.getName());
 		prize.setType(entry.getType());
+		prize.setAllowDuplicates(entry.isAllowDuplicates());
 		return prize;
 	}
 

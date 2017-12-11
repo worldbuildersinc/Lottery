@@ -1,40 +1,17 @@
 package org.worldbuilders.lottery.bean.excel.headermapping;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 /**
  * Created by brendondugan on 4/16/17.
  */
+@Data
+@AllArgsConstructor
 public class PrizeHeaderMapping {
 	private String nameHeader;
 	private String quantityHeader;
 	private String typeHeader;
+	private String allowDuplicatesHeader;
 
-	public PrizeHeaderMapping(String nameHeader, String quantityHeader, String typeHeader) {
-		this.nameHeader = nameHeader;
-		this.quantityHeader = quantityHeader;
-		this.typeHeader = typeHeader;
-	}
-
-	public String getNameHeader() {
-		return nameHeader;
-	}
-
-	public void setNameHeader(String nameHeader) {
-		this.nameHeader = nameHeader;
-	}
-
-	public String getQuantityHeader() {
-		return quantityHeader;
-	}
-
-	public void setQuantityHeader(String quantityHeader) {
-		this.quantityHeader = quantityHeader;
-	}
-
-	public String getTypeHeader() {
-		return typeHeader;
-	}
-
-	public void setTypeHeader(String typeHeader) {
-		this.typeHeader = typeHeader;
-	}
 }

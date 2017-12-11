@@ -45,7 +45,7 @@ public class Lottery {
 	public void selectWinner() {
 		Prize prize = getRandomPrize();
 		RaffleTicket raffleTicket = getRandomRaffleTicketByType(prize.getType());
-		while (isDuplicatePrizeForUser(prize, raffleTicket)){
+		while (!prize.getAllowDuplicates() && isDuplicatePrizeForUser(prize, raffleTicket)){
 			raffleTicket = getRandomRaffleTicketByType(prize.getType());
 		}
 		winners.put(prize, raffleTicket);

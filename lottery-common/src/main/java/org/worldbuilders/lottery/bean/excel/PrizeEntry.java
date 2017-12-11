@@ -12,5 +12,6 @@ public class PrizeEntry extends ExcelEntry {
 	private String name;
 	private int quantity;
 	private String type;
+	private boolean allowDuplicates;
 
 }

@@ -24,7 +24,7 @@ public class OptimizedPrizeReader {
 	private OptimizedExcelReader excelReader;
 
 	public OptimizedPrizeReader(File inputFile) throws IOException, InvalidFormatException {
-		this(inputFile, new PrizeHeaderMapping("Prize Name", "Qty", "Type"));
+		this(inputFile, new PrizeHeaderMapping("Prize Name", "Qty", "Type", "Allow Duplicates"));
 	}
 
 	private OptimizedPrizeReader(File inputFile, PrizeHeaderMapping headerMapping) throws IOException, InvalidFormatException {
@@ -71,6 +71,9 @@ public class OptimizedPrizeReader {
 		}
 		if (row.stringValueExistsForHeader(headerMapping.getQuantityHeader())) {
 			prizeEntry.setQuantity(row.getIntegerValue(headerMapping.getQuantityHeader()));
+		}
+		if (row.stringValueExistsForHeader(headerMapping.getAllowDuplicatesHeader())) {
+			prizeEntry.setAllowDuplicates(row.getStringValue(headerMapping.getAllowDuplicatesHeader()).equals("Yes"));
 		}
 		return prizeEntry;
 	}

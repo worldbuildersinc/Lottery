@@ -24,4 +24,6 @@ public class Prize {
 	private String type;
 	@Column
 	private Boolean isClaimed = false;
+	@Column
+	private Boolean allowDuplicates = false;
 }
