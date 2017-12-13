@@ -6,7 +6,7 @@
 
     <groupId>org.worldbuilders</groupId>
     <artifactId>lottery-common</artifactId>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
     <properties>
         <poi.version>3.15</poi.version>
         <slf4j.version>1.7.25</slf4j.version>
