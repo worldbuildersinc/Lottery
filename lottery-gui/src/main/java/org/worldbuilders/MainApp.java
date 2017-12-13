@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public class MainApp extends Application {
 		Scene scene = new Scene(rootNode);
 		scene.getStylesheets().add("/styles/styles.css");
 		stage.setTitle("WorldBuilders Lottery");
+		stage.getIcons().add(new Image("/build-resources/logo.png"));
 		stage.setScene(scene);
 		stage.show();
 	}

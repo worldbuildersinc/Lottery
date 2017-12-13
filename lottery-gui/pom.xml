@@ -21,11 +21,13 @@
         <log4j.version>1.2.17</log4j.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
+        <lottery.app.main>org.worldbuilders.MainApp</lottery.app.main>
+        <build.finalName>Worldbuilders Lottery</build.finalName>
     </properties>
 
     <build>
 
-        <finalName>lottery-gui</finalName>
+        <finalName>${build.finalName}</finalName>
 
         <plugins>
 
@@ -34,7 +36,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.1.5</version>
                 <configuration>
-                    <mainClass>org.worldbuilders.MainApp</mainClass>
+                    <mainClass>${lottery.app.main}</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -53,7 +55,7 @@
                                 <!-- add Main-Class to manifest file -->
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.worldbuilders.MainApp</mainClass>
+                                    <mainClass>${lottery.app.main}</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
@@ -64,6 +66,94 @@
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>windows-deploy</id>
+            <activation>
+                <os>
+                    <family>Windows</family>
+                </os>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.akathist.maven.plugins.launch4j</groupId>
+                        <artifactId>launch4j-maven-plugin</artifactId>
+                        <version>1.5.1</version>
+                        <executions>
+                            <execution>
+                                <id>l4j-clui</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>launch4j</goal>
+                                </goals>
+                                <configuration>
+                                    <headerType>gui</headerType>
+                                    <jar>${project.build.directory}/${build.finalName}.jar</jar>
+                                    <outfile>${project.build.directory}/${build.finalName}.exe</outfile>
+                                    <downloadUrl>http://java.com/download</downloadUrl>
+                                    <classPath>
+                                        <mainClass>${lottery.app.main}</mainClass>
+                                        <preCp>anything</preCp>
+                                    </classPath>
+                                    <icon>src/main/resources/build-resources/win/icons/logo.ico</icon>
+                                    <jre>
+                                        <minVersion>1.8.0</minVersion>
+                                        <jdkPreference>preferJre</jdkPreference>
+                                    </jre>
+                                    <versionInfo>
+                                        <fileVersion>1.0.0.0</fileVersion>
+                                        <txtFileVersion>${project.version}</txtFileVersion>
+                                        <fileDescription>${build.finalName}</fileDescription>
+                                        <copyright>2017 Worldbuilders Inc</copyright>
+                                        <productVersion>1.0.0.0</productVersion>
+                                        <txtProductVersion>1.0.0.0</txtProductVersion>
+                                        <productName>${build.finalName}</productName>
+                                        <companyName>Worldbuilders Inc</companyName>
+                                        <internalName>Worldbuilders</internalName>
+                                        <originalFilename>${build.finalName}.exe</originalFilename>
+                                    </versionInfo>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>mac-deploy</id>
+            <activation>
+                <os>
+                    <family>mac</family>
+                </os>
+            </activation>
+            <build>
+                <finalName>${build.finalName}</finalName>
+                <plugins>
+                    <plugin>
+                        <groupId>sh.tak.appbundler</groupId>
+                        <artifactId>appbundle-maven-plugin</artifactId>
+                        <version>1.2.0</version>
+                        <configuration>
+                            <mainClass>${lottery.app.main}</mainClass>
+                            <iconFile>build-resources/osx/icons/logo.icns</iconFile>
+                            <generateDiskImageFile>true</generateDiskImageFile>
+                            <includeApplicationsSymlink>true</includeApplicationsSymlink>
+                            <bundleName>${build.finalName}</bundleName>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>bundle</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
 
@@ -121,6 +211,7 @@
             <artifactId>hsqldb</artifactId>
             <version>2.4.0</version>
         </dependency>
+
 
     </dependencies>
 
