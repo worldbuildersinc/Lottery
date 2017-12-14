@@ -90,13 +90,13 @@
                                 <configuration>
                                     <headerType>gui</headerType>
                                     <jar>${project.build.directory}/${build.finalName}.jar</jar>
-                                    <outfile>${project.build.directory}/hasCode.exe</outfile>
+                                    <outfile>${project.build.directory}/${build.finalName}.exe</outfile>
                                     <downloadUrl>http://java.com/download</downloadUrl>
                                     <classPath>
                                         <mainClass>${lottery.app.main}</mainClass>
                                         <preCp>anything</preCp>
                                     </classPath>
-                                    <icon>src/main/resources/build-resources/win/logo.ico</icon>
+                                    <icon>src/main/resources/build-resources/win/icons/logo.ico</icon>
                                     <jre>
                                         <minVersion>1.8.0</minVersion>
                                         <jdkPreference>preferJre</jdkPreference>
@@ -105,7 +105,7 @@
                                         <fileVersion>1.0.0.0</fileVersion>
                                         <txtFileVersion>${project.version}</txtFileVersion>
                                         <fileDescription>${build.finalName}</fileDescription>
-                                        <copyright>2012 hasCode.com</copyright>
+                                        <copyright>2017 Worldbuilders Inc</copyright>
                                         <productVersion>1.0.0.0</productVersion>
                                         <txtProductVersion>1.0.0.0</txtProductVersion>
                                         <productName>${build.finalName}</productName>
